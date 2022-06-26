@@ -1,0 +1,54 @@
+version: '3' # Версия спецификации docker-compose
+
+services: # Раздел описания сервисов
+  web: # Описываем сервис нашего веб-приложения
+    container_name: web-udw-avia-local # Наименование контейнера приложения
+    build:
+      context: ./app # Папка, где находится Dockerfile, из которого будет создан контейнер
+    volumes:
+      - ./app/:/usr/src/app/ # Проброс файлов проекта в контейнер
+      - web-static-local:/usr/src/app/static # Вынесение статики в отдельный том
+    env_file:
+      - ./app/.env # Указание файла с переменными окружения
+    depends_on:
+      - db # Запуск контейнера, после успешного запуска контейнера с базой данных
+    networks:
+      - udw-avia-local # Подключение контейнера к общей сети udw-avia-local
+    # создание и накатывание миграций, сбор статики и запуск сервера разработки
+    command: bash -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      python manage.py runserver 0.0.0.0:8000" # ВАЖНО! runserver используется только для разработки. Для рабочего окружения необходимо использовать wsgi веб-сервер, например, uWSGI или Gunicorn.
+
+  nginx: # Описываем сервис с веб-сервером nginx
+    container_name: nginx-udw-avia-local # Наименование контейнера
+    image: nginx:latest # Официальный образ nginx, на базе которого будет создаваться контейнер
+    ports:
+      - ${NGINX_PORT:-8000}:9000 # Проброс портов. Если есть переменная окружения NGINX_PORT, то будет взято её значение, иначе будет 8000
+    depends_on:
+      - web # Запуск контейнера, после успешного запуска контейнера с веб-приложением
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Проброс файла с описанием виртуальных хостов nginx
+      - web-static-local:/usr/src/app/static # Проброс тома со статикой, что бы веб-сервер мог её кэшировать
+    networks:
+      - udw-avia-local # Подключение контейнера к общей сети udw-avia-local
+
+  db: # Описываем сервис с базой данных
+    container_name: db-udw-avia-local # Наименование контейнера
+    image: postgres:14-alpine # Официальный образ postgres, на базе которого будет создаваться контейнер
+    env_file:
+      - .env.db # Файл с переменными окружения для postgres
+    ports:
+      - "5433:5432" # Проброс портов в сеть хоста, что бы подключаться к СУБД через клиент
+    networks:
+      - udw-avia-local # Подключение контейнера к общей сети udw-avia-local
+    volumes:
+      - postgres-data-local:/var/lib/postgresql/data/ # Проброс данных БД на отдельный том, для надежности хранения данных
+
+volumes: # Раздел с томами, используемыми в сервисах
+  web-static-local:
+  postgres-data-local:
+
+networks: # Раздел с сетями, используемыми в сервисах
+ udw-avia-local:
+    driver: bridge
