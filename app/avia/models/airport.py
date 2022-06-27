@@ -17,5 +17,9 @@ class Airport(Model):
     region = ForeignKey('avia.Region', verbose_name='Регион', on_delete=CASCADE, related_name='airport')
     municipality = ForeignKey('avia.Municipality', verbose_name='Город', on_delete=CASCADE, related_name='airport')
 
+    class Meta:
+        verbose_name = 'аэропорт'
+        verbose_name_plural = 'аэропорты'
+
     def __str__(self):
         return f'{self.name} ({self.local_code} - {self.ident})'
