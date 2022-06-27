@@ -8,3 +8,5 @@ class Continent(Model):
         verbose_name = 'страна'
         verbose_name_plural = 'страны'
 
+    def __str__(self):
+        return self.title

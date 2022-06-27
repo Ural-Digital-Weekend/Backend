@@ -7,3 +7,6 @@ class Region(Model):
     class Meta:
         verbose_name = 'регион'
         verbose_name_plural = 'регионы'
+
+    def __str__(self):
+        return self.iso_code

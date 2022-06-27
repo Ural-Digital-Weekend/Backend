@@ -7,3 +7,6 @@ class Country(Model):
     class Meta:
         verbose_name = 'страна'
         verbose_name_plural = 'страны'
+
+    def __str__(self):
+        return self.iso_code

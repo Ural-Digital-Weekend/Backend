@@ -7,3 +7,6 @@ class AirportType(Model):
     class Meta:
         verbose_name = 'вид аэропорта'
         verbose_name_plural = 'виды аэропортов'
+
+    def __str__(self):
+        return self.title

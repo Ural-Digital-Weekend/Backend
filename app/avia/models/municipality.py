@@ -7,3 +7,6 @@ class Municipality(Model):
     class Meta:
         verbose_name = 'город'
         verbose_name_plural = 'города'
+
+    def __str__(self):
+        return self.title
