@@ -1,5 +1,4 @@
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 
 from avia.models import Airport
@@ -9,7 +8,6 @@ from avia.serializers import AirportSerializer, AirportListElementSerializer
 class AirportsViewSet(ModelViewSet):
     permission_classes = []
     filter_backends = [SearchFilter, OrderingFilter]
-    pagination_class = PageNumberPagination  # пагинация
 
     search_fields = ('id', 'ident', 'local_code', 'name',)  # Перечень полей, по которым можно осуществлять фильтрацию
     ordering_fields = ('id', 'ident', 'local_code', 'name',)  # Перечень полей, по которым доступна сортировка

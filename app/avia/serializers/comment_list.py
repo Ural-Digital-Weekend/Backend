@@ -1,17 +1,11 @@
-from django.contrib.auth.models import User
 from rest_framework.serializers import ModelSerializer
 
+from authorization.serializers import UserSerializer
 from avia.models import Comment
 
 
-class UserEmailSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('email', 'username')
-
-
 class CommentListSerializer(ModelSerializer):
-    user = UserEmailSerializer()
+    user = UserSerializer()
 
     class Meta:
         model = Comment

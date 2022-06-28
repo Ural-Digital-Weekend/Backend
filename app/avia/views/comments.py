@@ -1,6 +1,5 @@
 from django.http import Http404
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -11,7 +10,6 @@ from avia.serializers import CommentListSerializer, CommentSerializer
 
 class CommentsViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    pagination_class = PageNumberPagination  # пагинация
     serializer_class = CommentSerializer
 
     queryset = Comment.objects
