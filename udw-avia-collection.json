@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "aa33d796-7158-42a9-ba10-79cc3045ab35",
+		"name": "[UDW] Avia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16636215"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admincheg1\",\n    \"email\": \"admin1@mail.ru\",\n    \"password\": \"admin2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1NjM2NzAyNCwiaWF0IjoxNjU2MjgwNjI0LCJqdGkiOiJmZWNiMWQ0M2MwN2Y0N2NiOGE1ZDJiZjVhZjRkZDM5MCIsInVzZXJfaWQiOjF9.athIKUxYV_-I48DQcTlYEIiM2pSO1XAmtYYMJ8avGQM\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Airports",
+			"item": [
+				{
+					"name": "Airports List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/airports?ordering=id&search=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"airports"
+							],
+							"query": [
+								{
+									"key": "ordering",
+									"value": "id"
+								},
+								{
+									"key": "search",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Airports Detial",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/airports/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Airports | Comments",
+			"item": [
+				{
+					"name": "Comments List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/airports/:airport_id/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"airports",
+								":airport_id",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "count",
+									"value": "3",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "airport_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"some\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/airports/:airport_id/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"airports",
+								":airport_id",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "airport_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Comment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"AAAA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/airports/comments/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"airports",
+								"comments",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/airports/comments/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"airports",
+								"comments",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Handbooks",
+			"item": [
+				{
+					"name": "Airports Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/handbooks/airport-types",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"handbooks",
+								"airport-types"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "airport",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Regions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/handbooks/regions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"handbooks",
+								"regions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Countries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/handbooks/countries",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"handbooks",
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Continents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/handbooks/continents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"handbooks",
+								"continents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Municipalities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/handbooks/municipalities",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"handbooks",
+								"municipalities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU2NDgwOTk4LCJpYXQiOjE2NTYzOTQ1OTgsImp0aSI6ImZiZjhjMzMyNTAyNjQyNWFiMDUwNTg0ZWU3ODk0ZTE5IiwidXNlcl9pZCI6MX0.YrPIN8lx6fMxMSD6p5Qu4COqXIz-26vr5--uLOp3HGc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "127.0.0.1:8000/api",
+			"type": "string"
+		}
+	]
+}
