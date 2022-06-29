@@ -9,6 +9,13 @@ services: # Раздел описания сервисов
       - web-static-dev:/usr/src/app/static # Вынесение статики в отдельный том
     env_file:
       - ./app/.env # Указание файла с переменными окружения
+    environment:
+      - NGINX_PORT
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=5432
     depends_on:
       - db # Запуск контейнера, после успешного запуска контейнера с базой данных
     networks:
@@ -35,8 +42,10 @@ services: # Раздел описания сервисов
   db: # Описываем сервис с базой данных
     container_name: db-udw-avia-dev # Наименование контейнера
     image: postgres:14-alpine # Официальный образ postgres, на базе которого будет создаваться контейнер
-    env_file:
-      - .env.db # Файл с переменными окружения для postgres
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     networks:
       - udw-avia-dev # Подключение контейнера к общей сети udw-avia-dev
     volumes:

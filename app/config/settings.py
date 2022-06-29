@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "SET_ME_IN_.env_FILE")
 DEBUG = int(os.environ.get("DEBUG", default=0))
+NGINX_PORT = os.environ.get("NGINX_PORT", "8000")
 
 ALLOWED_HOSTS = [
     'web',
@@ -77,7 +78,7 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': '/api',
     'SCHEMA_PATH_PREFIX_TRIM': True,
     'SERVERS': [
-        {'url': 'http://localhost:8000/api', 'description': 'Local server'},
+        {'url': f'http://localhost:{NGINX_PORT}/api', 'description': 'Local server'},
     ],
     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',

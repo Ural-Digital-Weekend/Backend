@@ -6,6 +6,7 @@ from avia.models import Airport
 
 class AirportSerializer(ModelSerializer):
     region = StringRelatedField()
+    continent = StringRelatedField()
     country = StringRelatedField()
     municipality = StringRelatedField()
     type = StringRelatedField()
