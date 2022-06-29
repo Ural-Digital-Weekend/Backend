@@ -1,13 +1,23 @@
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from authorization.api.schemas import auth_responses
 from authorization.serializers import UserSerializer
 from authorization.utils import get_tokens_for_user
 
 
 class RegistrationVIew(APIView):
+    authentication_classes = []
+
+    @extend_schema(
+        summary="Регистрация",
+        description="Регистрация пользователя в системе",
+        tags=["Authorization"],
+        responses=auth_responses
+    )
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

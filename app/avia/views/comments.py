@@ -1,11 +1,21 @@
 from django.http import Http404
-from rest_framework import status
+from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
+from rest_framework import status, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from avia.api.schemas import order_parameter, pagination_parameters, response_400, response_201
+from avia.api.schemas.responses import response_200, response_204, response_401
 from avia.models import Comment, Airport
 from avia.serializers import CommentListSerializer, CommentSerializer
+
+comment_request = inline_serializer(
+    name="CommentRequest",
+    fields={
+        "comment": serializers.CharField()
+    }
+)
 
 
 class CommentsViewSet(ModelViewSet):
@@ -36,11 +46,36 @@ class CommentsViewSet(ModelViewSet):
 
         raise Http404
 
+    @extend_schema(
+        summary="Получение комментариев об аэропорте",
+        tags=['Airports | Comments'],
+        parameters=[
+            order_parameter,
+            *pagination_parameters
+        ],
+        responses={
+            200: OpenApiResponse(
+                description="Успешно получен список комментариев к аэропорту",
+                response=CommentListSerializer,
+            ),
+            400: response_400,
+        }
+    )
     def list(self, request, *args, **kwargs):
-        self.permission_classes = []
+        self.authentication_classes = []
         self.serializer_class = CommentListSerializer
         return super(CommentsViewSet, self).list(request, *args, **kwargs)
 
+    @extend_schema(
+        summary="Добавления комментария об аэропорте",
+        tags=['Airports | Comments'],
+        request=comment_request,
+        responses={
+            201: response_201,
+            400: response_400,
+            401: response_401,
+        }
+    )
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data={
             "airport": kwargs.get('airport_id'),
@@ -51,6 +86,16 @@ class CommentsViewSet(ModelViewSet):
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
 
+    @extend_schema(
+        summary="Обновление комментария об аэропорте",
+        tags=['Airports | Comments'],
+        request=comment_request,
+        responses={
+            200: response_200,
+            400: response_400,
+            401: response_401,
+        }
+    )
     def update(self, request, *args, **kwargs):
         comment = self.get_object()
         serializer = self.serializer_class(comment, data={
@@ -63,6 +108,15 @@ class CommentsViewSet(ModelViewSet):
         data = self.get_serializer(comment).data
         return Response(data=data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary="Удаление комментария об аэропорте",
+        tags=['Airports | Comments'],
+        responses={
+            200: response_204,
+            400: response_400,
+            401: response_401,
+        }
+    )
     def remove(self, request, *args, **kwargs):
         self.get_object().delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

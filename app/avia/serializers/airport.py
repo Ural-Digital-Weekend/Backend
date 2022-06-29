@@ -9,7 +9,7 @@ class AirportSerializer(ModelSerializer):
     country = StringRelatedField()
     municipality = StringRelatedField()
     type = StringRelatedField()
-    
+
     class Meta:
         model = Airport
         fields = (
