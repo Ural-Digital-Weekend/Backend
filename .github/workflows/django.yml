@@ -1,0 +1,31 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.8.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8.10"
+    - name: Install Dependencies
+      working-directory: ./app
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run Tests
+      working-directory: ./app
+      run: |
+        python manage.py test
+    - name: Build the Docker image
+      working-directory: ./app
+      run: docker build . --file Dockerfile --tag $(echo ${{ github.repository }} | tr [:upper:] [:lower:]):${{github.sha}}-$(date +%s)
