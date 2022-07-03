@@ -14,7 +14,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
-    - name: Deploy to stage
+    - name: Deploy to prod
       working-directory: prod
       run: |
         echo "" > ../app/.env
@@ -23,5 +23,5 @@ jobs:
         echo "POSTGRES_PASSWORD=${{ secrets.PostgresProdPass }}" >> app/.env
         echo "POSTGRES_HOST=$POSTGRES_HOST" >> ../app/.env
         docker-compose build 
-        docker-compose up -f docker-compose-prod.yml -d
+        docker-compose up -d
 
