@@ -32,7 +32,7 @@ services: # Раздел описания сервисов
     depends_on:
       - web # Запуск контейнера, после успешного запуска контейнера с веб-приложением
     volumes:
-      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Проброс файла с описанием виртуальных хостов nginx
+      - ../config/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Проброс файла с описанием виртуальных хостов nginx
       - web-static:/usr/src/app/static # Проброс тома со статикой, что бы веб-сервер мог её кэшировать
     networks:
       - udw-avia # Подключение контейнера к общей сети udw-avia-dev

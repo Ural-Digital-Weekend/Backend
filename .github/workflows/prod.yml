@@ -17,8 +17,6 @@ jobs:
     - name: Deploy to prod
       working-directory: prod
       run: |
-        mkdir app
-        cp -r ../app/* app
         echo "" > .env
         echo "POSTGRES_DB=$POSTGRES_DB" >> .env
         echo "POSTGRES_USER=$POSTGRES_USER" >> .env
