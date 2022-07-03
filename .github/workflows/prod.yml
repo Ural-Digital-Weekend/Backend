@@ -1,0 +1,26 @@
+name: Deploy prod
+
+on:
+  push:
+    branches: [ "master" ]
+
+env:
+  POSTGRES_DB: "db-udw-avia" 
+  POSTGRES_USER: "udw-avia"
+  POSTGRES_HOST: "192.168.1.22"
+  
+jobs:
+  deploy:
+    needs: [build]
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy to stage
+      run: |
+        echo "POSTGRES_DB=$POSTGRES_DB" >> app/.env_prod
+        echo "POSTGRES_USER=$POSTGRES_USER" >> app/.env_prod
+        echo "POSTGRES_PASSWORD=${{ secrets.PostgresProdPass }}" >> app/.env_prod
+        echo "POSTGRES_HOST=$POSTGRES_HOST" >> app/.env_prod
+        docker-compose build --env-file app/.env_prod 
+        docker-compose up  --env-file app/.env_prod -f docker-compose-prod.yml -d
+
