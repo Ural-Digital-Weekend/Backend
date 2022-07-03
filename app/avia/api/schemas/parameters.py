@@ -31,3 +31,9 @@ order_parameter = OpenApiParameter(
         ),
     ],
 )
+
+handbook_search_parameter = OpenApiParameter(
+    location=OpenApiParameter.QUERY,
+    name='search',
+    description='Текстовый поиск по справочнику',
+)

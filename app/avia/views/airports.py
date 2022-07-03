@@ -1,3 +1,4 @@
+from django.db.models import Q
 from drf_spectacular.utils import extend_schema, OpenApiResponse, extend_schema_view, OpenApiParameter
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.viewsets import ModelViewSet
@@ -36,12 +37,51 @@ class AirportsViewSet(ModelViewSet):
     queryset = Airport.objects
     serializer_class = AirportSerializer
 
+    def filter_queryset(self, queryset):
+        qs = super(AirportsViewSet, self).filter_queryset(queryset)
+        filter_fields = {
+            "type__title": self.request.query_params.get('type', None),
+            "continent__title": self.request.query_params.get('continent', None),
+            "municipality__title": self.request.query_params.get('municipality', None),
+            "country__iso_code": self.request.query_params.get('country', None),
+            "region__iso_code": self.request.query_params.get('region', None),
+        }
+
+        return qs.filter(*[
+            Q(filter_item) for filter_item in filter_fields.items() if filter_item[1] is not None
+        ])
+
     @extend_schema(
         summary="Получение данных об аэропротах",
         tags=['Airports'],
         parameters=[
             order_parameter,
-            *pagination_parameters
+            *pagination_parameters,
+            OpenApiParameter(
+                location=OpenApiParameter.QUERY,
+                name='search',
+                description='Текстовый поиск по полям id, ident, local_code, name',
+            ),
+            OpenApiParameter(
+                location=OpenApiParameter.QUERY,
+                name='type',
+                description='тип аэропорта',
+            ),
+            OpenApiParameter(
+                location=OpenApiParameter.QUERY,
+                name='continent',
+                description='континент',
+            ),
+            OpenApiParameter(
+                location=OpenApiParameter.QUERY,
+                name='municipality',
+                description='город',
+            ),
+            OpenApiParameter(
+                location=OpenApiParameter.QUERY,
+                name='country',
+                description='страна',
+            ),
         ],
         responses={
             200: OpenApiResponse(

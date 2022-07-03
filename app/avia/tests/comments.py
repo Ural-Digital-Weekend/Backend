@@ -39,12 +39,14 @@ class CommentsTest(TestCase):
         }
 
     def test_comment_list_by_airport(self):
-        comment = Comment.objects.order_by('created').first()
+        qs = Comment.objects.filter(airport_id=self.airport.id)
+        comment = qs.first()
+        comment_count = qs.count()
 
         response = self.client.get(self.routes['list'])
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual(Comment.objects.filter(airport_id=self.airport.id).count(), response.data.get('count'))
+        self.assertEqual(comment_count, response.data.get('count'))
         self.assertEqual(comment.id, response.data.get('results')[0]['id'])
         self.assertEqual(comment.comment, response.data.get('results')[0]['comment'])
 
@@ -90,6 +92,7 @@ class CommentsTest(TestCase):
 
     def test_cant_delete_another_user_comment(self):
         comment = Comment.objects.exclude(user_id=self.user.id).first()
+
         response = self.client.delete(self.routes['detail'].format(comment_id=comment.id))
 
         self.assertEqual(403, response.status_code)

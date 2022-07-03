@@ -2,6 +2,7 @@ from django.http import Http404
 from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
 from rest_framework import status, serializers
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -22,6 +23,7 @@ comment_request = inline_serializer(
 class CommentsViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CommentSerializer
+    filter_backends = [OrderingFilter]
 
     queryset = Comment.objects
     ordering = ('created',)  # Сортировка по умолчанию

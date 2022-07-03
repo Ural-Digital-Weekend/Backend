@@ -4,13 +4,13 @@ from rest_framework.viewsets import ModelViewSet
 
 from avia.api.schemas.parameters import handbook_search_parameter
 from avia.api.schemas.responses import response_200_handbooks
-from avia.models import Continent
-from avia.serializers import ContinentSerializer
+from avia.models import Municipality
+from avia.serializers.handbooks.municipality import MunicipalitySerializer
 
 
 @extend_schema_view(
     list=extend_schema(
-        summary="Получение перечня континентов",
+        summary="Получение перечня городов",
         tags=['Handbooks'],
         parameters=[
             handbook_search_parameter,
@@ -20,11 +20,11 @@ from avia.serializers import ContinentSerializer
         }
     ),
 )
-class ContinentsViewSet(ModelViewSet):
+class MunicipalitiesViewSet(ModelViewSet):
     authentication_classes = []
     filter_backends = [SearchFilter]
     search_fields = ['title']
     pagination_class = None
 
-    queryset = Continent.objects
-    serializer_class = ContinentSerializer
+    queryset = Municipality.objects
+    serializer_class = MunicipalitySerializer

@@ -1,23 +1,30 @@
-from drf_spectacular.utils import extend_schema
-from rest_framework import status
-from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter
+from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
-from avia.api.schemas.responses import response_200_list
+from avia.api.schemas.parameters import handbook_search_parameter
+from avia.api.schemas.responses import response_200_handbooks
 from avia.models import AirportType
+from avia.serializers import AirportTypeSerializer
 
 
-class AirportTypesViewSet(ModelViewSet):
-    authentication_classes = []
-    queryset = AirportType.objects
-    pagination_class = None
-
-    @extend_schema(
+@extend_schema_view(
+    list=extend_schema(
         summary="Получение перечня типов аэропортов",
         tags=['Handbooks'],
+        parameters=[
+            handbook_search_parameter,
+        ],
         responses={
-            200: response_200_list,
+            200: response_200_handbooks,
         }
-    )
-    def list(self, request, *args, **kwargs):
-        return Response(data=self.queryset.values_list("title", flat=True), status=status.HTTP_200_OK)
+    ),
+)
+class AirportTypesViewSet(ModelViewSet):
+    authentication_classes = []
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
+    pagination_class = None
+
+    queryset = AirportType.objects
+    serializer_class = AirportTypeSerializer

@@ -5,8 +5,17 @@ response_200 = OpenApiResponse(
     description="Успешно получено"
 )
 
-response_200_list = OpenApiResponse(
-    response=serializers.ListSerializer(child=serializers.CharField()),
+response_200_handbooks = OpenApiResponse(
+    response=serializers.CharField(),
+    examples=[
+        OpenApiExample(
+            'Пример',
+            value={
+                'Наименование1',
+                'Наименование2'
+            }
+        )
+    ]
 )
 
 response_201 = OpenApiResponse(

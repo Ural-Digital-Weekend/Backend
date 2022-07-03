@@ -1,23 +1,30 @@
-from drf_spectacular.utils import extend_schema
-from rest_framework import status
-from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
-from avia.api.schemas.responses import response_200_list
+from avia.api.schemas.parameters import handbook_search_parameter
+from avia.api.schemas.responses import response_200_handbooks
 from avia.models import Country
+from avia.serializers.handbooks.country import CountrySerializer
 
 
-class CountriesViewSet(ModelViewSet):
-    authentication_classes = []
-    queryset = Country.objects
-    pagination_class = None
-
-    @extend_schema(
+@extend_schema_view(
+    list=extend_schema(
         summary="Получение перечня стран",
         tags=['Handbooks'],
+        parameters=[
+            handbook_search_parameter,
+        ],
         responses={
-            200: response_200_list,
+            200: response_200_handbooks,
         }
-    )
-    def list(self, request, *args, **kwargs):
-        return Response(data=self.queryset.values_list("iso_code", flat=True), status=status.HTTP_200_OK)
+    ),
+)
+class CountriesViewSet(ModelViewSet):
+    authentication_classes = []
+    filter_backends = [SearchFilter]
+    search_fields = ['iso_code']
+    pagination_class = None
+
+    queryset = Country.objects
+    serializer_class = CountrySerializer
