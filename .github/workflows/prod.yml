@@ -6,7 +6,7 @@ on:
 
 env:
   POSTGRES_DB: "db-udw-avia" 
-  POSTGRES_USER: "udw-avia"
+  POSTGRES_USER: "udw_avia"
   POSTGRES_HOST: "192.168.1.22"
   
 jobs:
