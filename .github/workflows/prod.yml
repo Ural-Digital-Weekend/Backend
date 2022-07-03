@@ -15,6 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Deploy to stage
+      working-directory: prod
       run: |
         echo "" > app/.env
         echo "POSTGRES_DB=$POSTGRES_DB" >> app/.env
