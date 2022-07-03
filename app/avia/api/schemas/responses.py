@@ -53,6 +53,17 @@ response_401 = OpenApiResponse(
     ]
 )
 
+response_403 = OpenApiResponse(
+    description='Нет прав доступа',
+    response=inline_serializer(
+        name='PermissionDenidSerializer',
+        fields={
+            'detail': serializers.CharField(),
+        }
+    ),
+)
+
+
 response_404 = OpenApiResponse(
     description='Ресурс не найден',
     response=inline_serializer(

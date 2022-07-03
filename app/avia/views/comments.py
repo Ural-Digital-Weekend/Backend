@@ -1,12 +1,13 @@
 from django.http import Http404
 from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
 from rest_framework import status, serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from avia.api.schemas import order_parameter, pagination_parameters, response_400, response_201
-from avia.api.schemas.responses import response_200, response_204, response_401
+from avia.api.schemas.responses import response_200, response_204, response_401, response_403
 from avia.models import Comment, Airport
 from avia.serializers import CommentListSerializer, CommentSerializer
 
@@ -19,11 +20,11 @@ comment_request = inline_serializer(
 
 
 class CommentsViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CommentSerializer
 
     queryset = Comment.objects
-    ordering = ('-created',)  # Сортировка по умолчанию
+    ordering = ('created',)  # Сортировка по умолчанию
 
     def get_queryset(self):
         queryset = super(CommentsViewSet, self).get_queryset()
@@ -39,12 +40,19 @@ class CommentsViewSet(ModelViewSet):
     def get_object(self):
         comment_id = self.kwargs.get('pk')
         user_id = self.request.user.id
-        comment = Comment.objects.filter(id=comment_id, user=user_id).first()
+        comment = Comment.objects.filter(id=comment_id)
 
-        if comment:
-            return comment
+        if not comment:
+            raise Http404
 
-        raise Http404
+        comment = comment.filter(user=user_id).first()
+
+        if not comment:
+            raise PermissionDenied
+
+        return comment
+
+
 
     @extend_schema(
         summary="Получение комментариев об аэропорте",
@@ -62,7 +70,6 @@ class CommentsViewSet(ModelViewSet):
         }
     )
     def list(self, request, *args, **kwargs):
-        self.authentication_classes = []
         self.serializer_class = CommentListSerializer
         return super(CommentsViewSet, self).list(request, *args, **kwargs)
 
@@ -93,7 +100,7 @@ class CommentsViewSet(ModelViewSet):
         responses={
             200: response_200,
             400: response_400,
-            401: response_401,
+            403: response_403,
         }
     )
     def update(self, request, *args, **kwargs):
@@ -114,7 +121,7 @@ class CommentsViewSet(ModelViewSet):
         responses={
             200: response_204,
             400: response_400,
-            401: response_401,
+            403: response_403,
         }
     )
     def remove(self, request, *args, **kwargs):
