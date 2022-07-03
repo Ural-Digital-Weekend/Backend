@@ -4,7 +4,7 @@ services: # Раздел описания сервисов
   web: # Описываем сервис нашего веб-приложения
     container_name: web-udw-avia # Наименование контейнера приложения
     build:
-      context:../app # Папка, где находится Dockerfile, из которого будет создан контейнер
+      context:./app # Папка, где находится Dockerfile, из которого будет создан контейнер
     volumes:
       - web-static-dev:/usr/src/app/static # Вынесение статики в отдельный том
     env_file:
