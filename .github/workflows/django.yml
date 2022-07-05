@@ -38,7 +38,7 @@ jobs:
         docker-compose up -d db
     - name: "Execute tests in container"
       run: |
-        docker run --env DB_USER=$POSTGRES_DB --env DB_PASSWORD=$POSTGRES_PASSWORD --network backend_udw-avia-dev -it backend_web  python manage.py test
+        docker run --env DB_USER=$POSTGRES_DB --env DB_PASSWORD=$POSTGRES_PASSWORD --network backend_udw-avia-dev backend_web  python manage.py test
   deploy:
     needs: [build]
     runs-on: self-hosted
