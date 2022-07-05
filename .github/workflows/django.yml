@@ -29,7 +29,6 @@ jobs:
 #      working-directory: ./app
 #      run: |
 #        python manage.py test
-        - name: Deploy to stage
     - name: "build docker container"
       run: |
         echo "POSTGRES_DB=udw-avia-dev" >> app/.env
