@@ -93,7 +93,7 @@ class CommentsViewSet(ModelViewSet):
         })
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     @extend_schema(
         summary="Обновление комментария об аэропорте",
