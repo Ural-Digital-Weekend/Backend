@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from drf_spectacular.utils import extend_schema
-from rest_framework import status
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,6 +16,14 @@ class RegistrationVIew(APIView):
         summary="Регистрация",
         description="Регистрация пользователя в системе",
         tags=["Authorization"],
+        request=inline_serializer(
+            name='AuthSerializer',
+            fields={
+                'username': serializers.CharField(),
+                'email': serializers.EmailField(),
+                'password': serializers.CharField(),
+            },
+        ),
         responses=auth_responses
     )
     def post(self, request):
