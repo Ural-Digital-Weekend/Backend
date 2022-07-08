@@ -3,10 +3,11 @@ from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from authorization.api.schemas import auth_responses
+from authorization.api.schemas import auth_response
 from authorization.serializers import UserSerializer
-from authorization.utils import get_tokens_for_user
+from avia.api.schemas import response_400
 
 
 class RegistrationVIew(APIView):
@@ -24,7 +25,10 @@ class RegistrationVIew(APIView):
                 'password': serializers.CharField(),
             },
         ),
-        responses=auth_responses
+        responses={
+            201: auth_response,
+            400: response_400,
+        }
     )
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -37,4 +41,11 @@ class RegistrationVIew(APIView):
             password=user.get('password'),
         )
 
-        return Response(data=get_tokens_for_user(user), status=status.HTTP_201_CREATED)
+        refresh = RefreshToken.for_user(user)
+
+        data = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+
+        return Response(data=data, status=status.HTTP_201_CREATED)

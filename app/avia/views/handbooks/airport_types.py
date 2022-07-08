@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiPara
 from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
-from avia.api.schemas.parameters import handbook_search_parameter
+from avia.api.schemas.parameters import search_parameter
 from avia.api.schemas.responses import response_200_handbooks
 from avia.models import AirportType
 from avia.serializers import AirportTypeSerializer
@@ -13,7 +13,7 @@ from avia.serializers import AirportTypeSerializer
         summary="Получение перечня типов аэропортов",
         tags=['Handbooks'],
         parameters=[
-            handbook_search_parameter,
+            search_parameter,
         ],
         responses={
             200: response_200_handbooks,

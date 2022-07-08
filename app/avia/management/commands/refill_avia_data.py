@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from avia.services.db_fill import refill_db_avia_data
+from avia.services import refill_db_avia_data
 
 
 class Command(BaseCommand):

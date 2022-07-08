@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
-from avia.api.schemas.parameters import handbook_search_parameter
+from avia.api.schemas.parameters import search_parameter
 from avia.api.schemas.responses import response_200_handbooks
 from avia.models import Region
 from avia.serializers.handbooks.region import RegionSerializer
@@ -13,7 +13,7 @@ from avia.serializers.handbooks.region import RegionSerializer
         summary="Получение перечня регионов",
         tags=['Handbooks'],
         parameters=[
-            handbook_search_parameter,
+            search_parameter,
         ],
         responses={
             200: response_200_handbooks,

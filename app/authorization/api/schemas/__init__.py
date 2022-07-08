@@ -1,1 +1,1 @@
-from .auth import auth_responses
+from .auth import auth_response
