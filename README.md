@@ -10,5 +10,5 @@
 6. API документация расположена по адресу [http://0.0.0.0:8000/api/swagger/](http://0.0.0.0:8000/api/swagger/)
 7. Развлекаться :)
 
-
+### Ссылка на заготовки - https://github.com/Ural-Digital-Weekend/Backend-Snippets
 
